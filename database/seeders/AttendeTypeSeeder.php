@@ -17,7 +17,8 @@ class AttendeTypeSeeder extends Seeder
     {
         $data = [
             'Absen Masuk',
-            'Absen Keluar'
+            'Absen Keluar',
+            'Absen Tidak Valid'
         ];
 
         foreach ($data as $type) {

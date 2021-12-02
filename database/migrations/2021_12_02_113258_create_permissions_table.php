@@ -30,6 +30,7 @@ class CreatePermissionsTable extends Migration
             $table->string('photo');
             $table->dateTime('start_date');
             $table->dateTime('due_date');
+            $table->string('file_name');
             $table->timestamps();
         });
     }

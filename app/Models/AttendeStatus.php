@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class AttendeStatus extends Model
 {
     use HasFactory;
+
+    public function kehadiran()
+    {
+        return $this->hasMany(Attende::class, 'attende_status_id', 'id');
+    }
 }

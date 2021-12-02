@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PermissionType extends Model
 {
     use HasFactory;
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'permission_type_id', 'id');
+    }
 }

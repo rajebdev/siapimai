@@ -18,7 +18,7 @@ class CreateAttendesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('attende_status_id')->references('id')->on('attende_statuses');
-            $table->foreignId('attende_types_id')->references('id')->on('attende_types');
+            $table->foreignId('attende_type_id')->references('id')->on('attende_types');
             $table->datetime('attend_time')->default(DB::raw('NOW()'));
             $table->float('latitude')->default(0);
             $table->float('longitude')->default(0);

@@ -19,7 +19,7 @@ class CreateApprovalsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->boolean('is_approved')->default(0);
-            $table->foreignId('approval_statuses_id')->references('id')->on('approval_statuses')->default(2);
+            $table->foreignId('approval_status_id')->references('id')->on('approval_statuses')->default(2);
             $table->string('photo');
             $table->dateTime('start_date');
             $table->dateTime('due_date');

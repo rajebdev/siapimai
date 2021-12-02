@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Attende extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
     const ON_TIME = 1;
     const LATE = 2;
     const ABSENT = 3;

@@ -13,10 +13,11 @@ class Attende extends Model
 
     const ON_TIME = 1;
     const LATE = 2;
-    const ABSENT = 3;
+    const STATUS_NOT_VALID = 3;
 
     const MASUK = 1;
     const KELUAR = 2;
+    const TYPE_NOT_VALID = 3;
 
     public function employee()
     {
@@ -48,9 +49,9 @@ class Attende extends Model
         return $query->where('attende_status_id', self::LATE);
     }
 
-    public function scopeAbsen($query)
+    public function scopeStatusNotValid($query)
     {
-        return $query->where('attende_status_id', self::ABSENT);
+        return $query->where('attende_status_id', self::STATUS_NOT_VALID);
     }
 
     public function scopeMasuk($query)
@@ -61,6 +62,11 @@ class Attende extends Model
     public function scopeKeluar($query)
     {
         return $query->where('attende_type_id', self::KELUAR);
+    }
+
+    public function scopeTypeNotValid($query)
+    {
+        return $query->where('attende_type_id', self::TYPE_NOT_VALID);
     }
     
     public function format()

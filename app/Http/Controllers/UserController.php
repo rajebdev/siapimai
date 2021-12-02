@@ -16,10 +16,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response([
-            'data' => User::all(),
-            'message' => 'Berhasil mengambil seluruh data user',
-        ], 200);
+        return resp(
+            true,
+            'Berhasil mengambil seluruh data user',
+            User::all(),
+            200
+        );
     }
 
     /**
@@ -29,7 +31,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return resp(
+            false,
+            'Fungsi tidak ada.',
+            '',
+            404
+        );
     }
 
     /**
@@ -51,10 +58,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return response([
-            'data' => User::find($id),
-            'message' => 'Berhasil mengambil data user' . $id,
-        ], 200);
+        return resp(
+            true,
+            'Berhasil mengambil data user' . $id,
+            User::find($id),
+            200
+        );
     }
 
     /**
@@ -65,9 +74,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return response([
-            'message' => 'Fungsi tidak ada.'
-        ], 404);
+        return resp(
+            false,
+            'Fungsi tidak ada.',
+            '',
+            404
+        );
     }
 
     /**
@@ -88,7 +100,13 @@ class UserController extends Controller
         $passwd = bcrypt($request->password);
         $request->merge(['password' => $passwd]);
         $user->update($request->all());
-        return $user;
+
+        return resp(
+            true,
+            'Berhasil mengubah user ' . $user->name,
+            $user,
+            200
+        );
     }
 
     /**
@@ -102,9 +120,12 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        return response([
-            'message' => 'Berhasil menghapus user ' . $user->name,
-        ], 200);
+        return resp(
+            true,
+            'Berhasil menghapus user ' . $user->name,
+            $user,
+            200
+        );
 
     }
 
@@ -128,33 +149,38 @@ class UserController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response([
-            'data' => $user,
-            'access_token' => $token, 
-            'token_type' => 'Bearer',
-        ], 201);
+        return resp(
+            true,
+            'Berhasil register user.',
+            $user,
+            201,
+            $token
+        );
     }
 
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('email', 'password')))
         {
-            return response([
-                'message' => 'Unauthorized'
-            ], 401);
+            return resp(
+                false,
+                'Bad Creds',
+                '',
+                401
+            );
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $respond = [
-            'message' => 'Hi '.$user->name.', welcome to SIAPIMAI',
-            'access_token' => $token, 
-            'token_type' => 'Bearer', 
-        ];
-
-        return response($respond, 200);
+        return resp(
+            true,
+            'Hi '.$user->name.', welcome to SIAPIMAI',
+            '',
+            200,
+            $token
+        );
     }
 
     // method for user logout and delete token
@@ -167,8 +193,11 @@ class UserController extends Controller
         $user = Auth::user();
         $user->tokens()->delete();
 
-        return [
-            'message' => 'Logged Out'
-        ];
+        return resp(
+            true,
+            'Berhasil log out',
+            'Berhasil',
+            200
+        );
     }
 }

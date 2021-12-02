@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class AttendeController extends Controller
 {
+
+    const ON_TIME = 1;
+    const LATE = 2;
+    const ABSENT = 3;
+
+    const MASUK = 1;
+    const KELUAR = 2;
+    const NOT_VALID = 3;
+
     /**
      * Display a listing of the resource.
      *
@@ -52,11 +61,51 @@ class AttendeController extends Controller
             'photo' => 'required',
         ]);
 
+        $distance = getDistance($fields['latitude'], $fields['longitude']);
+        if ($distance > 0.5) {
+            return resp(
+                false,
+                'Lokasi tidak sesuai',
+                [],
+                400,
+                "",
+                [
+                    'message' => "Sistem mendeteksi anda berada $distance km dari kantor"
+                ]
+            );
+        }
 
-        
+        $masuk = format_batas(6, 9);
+        $keluar = format_batas(17, 20);
+
+        $fields['attend_time'] = now();
+
+        if ($masuk['start'] <= $fields['attend_time'] && $fields['attend_time'] <= $masuk['end']){
+            $fields['attende_type_id'] = self::MASUK;
+            $fields['attende_status_id'] = self::ON_TIME;
+        }
+        else if ($fields['attend_time'] >= $masuk['end']){
+            $fields['attende_type_id'] = self::MASUK;
+            $fields['attende_status_id'] = self::LATE;
+        }
+        else if ($keluar['start'] <= $fields['attend_time'] && $fields['attend_time'] <= $keluar['end']){
+            $fields['attende_type_id'] = self::KELUAR;
+            $fields['attende_status_id'] = self::ON_TIME;
+        }
+        else if ($fields['attend_time'] >= $keluar['end']){
+            $fields['attende_type_id'] = self::KELUAR;
+            $fields['attende_status_id'] = self::LATE;
+        }
+        else{
+            $fields['attende_type_id'] = self::NOT_VALID;
+            $errors = [
+                'message' => 'Tidak dapat absen dil uar waktu.'
+            ];
+        }
 
         $attende = Attende::create([
-            'user_id' => $fields['user_id'],
+            'user_id' => $request->user()->id,
+            'attende_type_id' => $fields['attende_type_id'],
             'attende_status_id' => $fields['attende_status_id'],
             'attend_time' => $fields['attend_time'],
             'latitude' => $fields['latitude'],
@@ -68,7 +117,9 @@ class AttendeController extends Controller
             true,
             'Berhasil record kehadiran.',
             $attende,
-            201
+            201,
+            "",
+            $errors
         );
     }
 

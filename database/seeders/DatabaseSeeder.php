@@ -22,11 +22,12 @@ class DatabaseSeeder extends Seeder
             GenderSeeder::class,
             DepartmentSeeder::class,
             UserSeeder::class,
-            AttendeType::class,
-            AttendeStatus::class,
-            Attende::class,
-            ApprovalStatus::class,
-            Approval::class,
+            AttendeTypeSeeder::class,
+            AttendeStatusSeeder::class,
+            AttendeSeeder::class,
+            PermissionTypeSeeder::class,
+            PermissionStatusSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

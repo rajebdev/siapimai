@@ -19,8 +19,6 @@ class AttendeStatusSeeder extends Seeder
             'Tepat Waktu',
             'Terlambat',
             'Tidak Hadir',
-            'Izin Sakit',
-            'Izin Cuti'
         ];
 
         foreach ($data as $status) {

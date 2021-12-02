@@ -15,6 +15,21 @@ class CreatePermissionsTable extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->string('title');
+            $table->text('description');
+            $table->boolean('is_approved')->default(0);
+            $table->foreignId('permission_status_id')
+                ->nullable()
+                ->references('id')
+                ->on('permission_statuses');
+            $table->foreignId('permission_type_id')
+                ->nullable()
+                ->references('id')
+                ->on('permission_types');
+            $table->string('photo');
+            $table->dateTime('start_date');
+            $table->dateTime('due_date');
             $table->timestamps();
         });
     }

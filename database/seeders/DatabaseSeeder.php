@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Approval;
+use App\Models\ApprovalStatus;
+use App\Models\Attende;
+use App\Models\AttendeStatus;
+use App\Models\AttendeType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,6 +22,11 @@ class DatabaseSeeder extends Seeder
             GenderSeeder::class,
             DepartmentSeeder::class,
             UserSeeder::class,
+            AttendeType::class,
+            AttendeStatus::class,
+            Attende::class,
+            ApprovalStatus::class,
+            Approval::class,
         ]);
     }
 }

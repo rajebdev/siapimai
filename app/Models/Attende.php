@@ -12,6 +12,9 @@ class Attende extends Model
     const LATE = 2;
     const ABSENT = 3;
 
+    const MASUK = 1;
+    const KELUAR = 2;
+
     public function employee()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -20,6 +23,11 @@ class Attende extends Model
     public function status_kehadiran()
     {
         return $this->belongsTo(AttendeStatus::class, 'attende_status_id', 'id');
+    }
+
+    public function type_kehadiran()
+    {
+        return $this->belongsTo(AttendeType::class, 'attende_type_id', 'id');
     }
 
     public function scopeToday($query)
@@ -40,6 +48,16 @@ class Attende extends Model
     public function scopeAbsen($query)
     {
         return $query->where('attende_status_id', self::ABSENT);
+    }
+
+    public function scopeMasuk($query)
+    {
+        return $query->where('attende_type_id', self::MASUK);
+    }
+
+    public function scopeKeluar($query)
+    {
+        return $query->where('attende_type_id', self::KELUAR);
     }
     
     public function format()

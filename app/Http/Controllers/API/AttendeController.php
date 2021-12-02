@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Attende;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AttendeController extends Controller
 {
 
     const ON_TIME = 1;
     const LATE = 2;
-    const ABSENT = 3;
+    const STATUS_NOT_VALID = 3;
 
     const MASUK = 1;
     const KELUAR = 2;
-    const NOT_VALID = 3;
+    const TYPE_NOT_VALID = 3;
 
     /**
      * Display a listing of the resource.
@@ -55,6 +56,7 @@ class AttendeController extends Controller
      */
     public function store(Request $request)
     {
+        $errors = [];
         $fields = $request->validate([
             'latitude' => 'required',
             'longitude' => 'required',
@@ -78,13 +80,13 @@ class AttendeController extends Controller
         $masuk = format_batas(6, 9);
         $keluar = format_batas(17, 20);
 
-        $fields['attend_time'] = now();
-
+        $fields['attend_time'] = Carbon::now();
+        
         if ($masuk['start'] <= $fields['attend_time'] && $fields['attend_time'] <= $masuk['end']){
             $fields['attende_type_id'] = self::MASUK;
             $fields['attende_status_id'] = self::ON_TIME;
         }
-        else if ($fields['attend_time'] >= $masuk['end']){
+        else if ($fields['attend_time'] >= $masuk['end'] && $fields['attend_time']  <= $keluar['start'] && $fields['attend_time']->toDateString() === $masuk['end']->toDateString()){
             $fields['attende_type_id'] = self::MASUK;
             $fields['attende_status_id'] = self::LATE;
         }
@@ -92,26 +94,21 @@ class AttendeController extends Controller
             $fields['attende_type_id'] = self::KELUAR;
             $fields['attende_status_id'] = self::ON_TIME;
         }
-        else if ($fields['attend_time'] >= $keluar['end']){
+        else if ($fields['attend_time'] >= $keluar['end'] && $fields['attend_time']->toDateString() === $keluar['end']->toDateString()){
             $fields['attende_type_id'] = self::KELUAR;
             $fields['attende_status_id'] = self::LATE;
         }
         else{
-            $fields['attende_type_id'] = self::NOT_VALID;
+            $fields['attende_status_id'] = self::STATUS_NOT_VALID;
+            $fields['attende_type_id'] = self::TYPE_NOT_VALID;
             $errors = [
                 'message' => 'Tidak dapat absen dil uar waktu.'
             ];
         }
 
-        $attende = Attende::create([
-            'user_id' => $request->user()->id,
-            'attende_type_id' => $fields['attende_type_id'],
-            'attende_status_id' => $fields['attende_status_id'],
-            'attend_time' => $fields['attend_time'],
-            'latitude' => $fields['latitude'],
-            'longitude' => $fields['longitude'],
-            'photo' => $fields['photo'],
-        ]);
+        $fields['user_id'] = $request->user()->id;
+
+        $attende = Attende::create($fields);
 
         return resp(
             true,

@@ -43,12 +43,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route Permission Data
     Route::group(['prefix' => 'permissions'], function () {
         Route::get('/all', [PermissionController::class, 'all']);
-        Route::post('/approve',  [PermissionController::class, 'approve']);
+        Route::get('/my', [PermissionController::class, 'my']);
+        Route::post('/approve/{permissions}',  [PermissionController::class, 'approve']);
     });
     Route::resource('permissions', PermissionController::class);
-    Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/all', [PermissionController::class, 'all']);
-        // Route::post('/approve/{permission}',  [PermissionController::class, 'approve']);
-    });
 });
 

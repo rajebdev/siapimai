@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,9 +18,28 @@ class PermissionController extends Controller
     public function index()
     {
         return resp(
+            false,
+            'Fungsi tidak ada.',
+            '',
+            404
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function my(Request $request)
+    {
+        $permissions = Permission::where([
+            'user_id' => $request->user()->id,
+        ])->with(['user'])->get();
+        return resp(
             true,
             'Berhasil mengambil seluruh data izin.',
-            Permission::all(),
+            $permissions,
             200
         );
     }
@@ -32,8 +52,8 @@ class PermissionController extends Controller
      */
     public function all(Request $request)
     {
-        if ($request->user()::with('department')
-        ->first()->department->slug === 'employee') {
+        if (User::with('department')
+        ->find($request->user()->id)->department->slug === 'employee') {
             return resp(
                 false,
                 'Pelanggaran',
@@ -60,10 +80,10 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function approve(Request $request)
+    public function approve(Request $request, $id)
     {
-        if ($request->user()::with('department')
-        ->first()->department->slug === 'employee') {
+        if (User::with('department')
+        ->find($request->user()->id)->department->slug === 'employee') {
             return resp(
                 false,
                 'Pelanggaran',
@@ -77,16 +97,15 @@ class PermissionController extends Controller
         }
 
         $fields = $request->validate([
-            'id' => 'required',
             'is_approved' => 'required',
         ]);
 
         $fields['permission_status_id'] = $request->is_approved ? Permission::APPROVED : Permission::REJECTED;
 
-        $permission = Permission::find($request->id);
+        $permission = Permission::find($id);
 
         $permission->update($fields);
-        
+
         return resp(
             true,
             'Sukses mengubah status izin!',

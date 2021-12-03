@@ -17,9 +17,9 @@ use App\Http\Controllers\WEB\PermissionController;
 */
 
 // Public routes
-Route::get('/', [UserController::class, 'login']);
-Route::get('/login', [UserController::class, 'login']);
-Route::get('/register', [UserController::class, 'register']);
+Route::get('/', [UserController::class, 'login'])->middleware('guest');
+Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
+Route::get('/register', [UserController::class, 'register'])->middleware('guest');
 
 
 // Protected routes with sanctum

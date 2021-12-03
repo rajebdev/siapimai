@@ -19,17 +19,17 @@ class Attende extends Model
     const KELUAR = 2;
     const TYPE_NOT_VALID = 3;
 
-    public function employee()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function status_kehadiran()
+    public function status()
     {
         return $this->belongsTo(AttendeStatus::class, 'attende_status_id', 'id');
     }
 
-    public function type_kehadiran()
+    public function type()
     {
         return $this->belongsTo(AttendeType::class, 'attende_type_id', 'id');
     }
@@ -73,10 +73,10 @@ class Attende extends Model
     {
         return [
             'user' => [
-                'name' => $this->employee->name,
-                'department' => $this->employee->departemen->name,
+                'name' => $this->user->name,
+                'department' => $this->user->departement->name,
             ],
-            'status_kehadiran' => $this->status_kehadiran->name,
+            'status_kehadiran' => $this->status->name,
             'jam_absen' => $this->attend_time,
         ];
     }

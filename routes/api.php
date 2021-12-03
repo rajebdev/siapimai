@@ -38,12 +38,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('users', UserController::class);
 
     // Route Attende Data
+    Route::group(['prefix' => 'attendes'], function () {
+        Route::get('/my', [AttendeController::class, 'my']);
+        Route::get('/all', [AttendeController::class, 'all']);
+    });
     Route::resource('attendes', AttendeController::class);
     
     // Route Permission Data
     Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/all', [PermissionController::class, 'all']);
         Route::get('/my', [PermissionController::class, 'my']);
+        Route::get('/all', [PermissionController::class, 'all']);
         Route::post('/approve/{permissions}',  [PermissionController::class, 'approve']);
     });
     Route::resource('permissions', PermissionController::class);

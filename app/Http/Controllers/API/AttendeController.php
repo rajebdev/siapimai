@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Attende;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,8 +19,56 @@ class AttendeController extends Controller
     public function index()
     {
         return resp(
+            false,
+            'Fungsi tidak ada.',
+            '',
+            404
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function my(Request $request)
+    {
+        $attende = Attende::where([
+            'user_id' => $request->user()->id,
+        ])->with(['user'])->get();
+        return resp(
             true,
-            'Berhasil mengambil seluruh data kehadiran',
+            'Berhasil mengambil seluruh data kehadiran.',
+            $attende,
+            200
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function all(Request $request)
+    {
+        if (User::with('department')
+        ->find($request->user()->id)->department->slug === 'employee') {
+            return resp(
+                false,
+                'Pelanggaran',
+                [],
+                403,
+                0,
+                [
+                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
+                ]
+            );
+        }
+        return resp(
+            true,
+            'Berhasil mengambil seluruh data izin.',
             Attende::all(),
             200
         );

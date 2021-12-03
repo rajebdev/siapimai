@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\PermissionType;
 
 class PermissionController extends Controller
 {
@@ -47,7 +47,46 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'permission_type_id' => 'required',
+            'photo' => 'required',
+            'start_date' => 'required',
+            'due_date' => 'required',
+            'file_name' => 'required',
+        ]);
+        $fields['user_id'] = $request->user()->id;
+        $fields['permission_status_id'] = Permission::PENDING;
+
+        $permission_active = Permission::whereDate('start_date', Carbon::parse($request->start_date))
+            ->where('user_id', $request->user()->id)
+            ->whereIn('permission_status_id', [Permission::APPROVED, Permission::PENDING])
+            ->get()->first();
+
+        if ($permission_active){
+            return resp(
+                false,
+                'Gagal',
+                [],
+                400,
+                0,
+                [
+                    'message' => 'Izin sudah diajukan tertanggal ' . now()->translatedFormat('l, d F Y')
+                ]
+            );
+        }
+        
+        $permission = Permission::create($fields);
+
+        return resp(
+            true,
+            'Berhasil record Izin.',
+            $permission,
+            201,
+            ""
+        );
+
     }
 
     /**

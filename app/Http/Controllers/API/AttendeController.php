@@ -10,14 +10,6 @@ use App\Http\Controllers\Controller;
 class AttendeController extends Controller
 {
 
-    const ON_TIME = 1;
-    const LATE = 2;
-    const STATUS_NOT_VALID = 3;
-
-    const MASUK = 1;
-    const KELUAR = 2;
-    const TYPE_NOT_VALID = 3;
-
     /**
      * Display a listing of the resource.
      *
@@ -83,24 +75,24 @@ class AttendeController extends Controller
         $fields['attend_time'] = Carbon::now();
         
         if ($masuk['start'] <= $fields['attend_time'] && $fields['attend_time'] <= $masuk['end']){
-            $fields['attende_type_id'] = self::MASUK;
-            $fields['attende_status_id'] = self::ON_TIME;
+            $fields['attende_type_id'] = Attende::MASUK;
+            $fields['attende_status_id'] = Attende::ON_TIME;
         }
         else if ($fields['attend_time'] >= $masuk['end'] && $fields['attend_time']  <= $keluar['start'] && $fields['attend_time']->toDateString() === $masuk['end']->toDateString()){
-            $fields['attende_type_id'] = self::MASUK;
-            $fields['attende_status_id'] = self::LATE;
+            $fields['attende_type_id'] = Attende::MASUK;
+            $fields['attende_status_id'] = Attende::LATE;
         }
         else if ($keluar['start'] <= $fields['attend_time'] && $fields['attend_time'] <= $keluar['end']){
-            $fields['attende_type_id'] = self::KELUAR;
-            $fields['attende_status_id'] = self::ON_TIME;
+            $fields['attende_type_id'] = Attende::KELUAR;
+            $fields['attende_status_id'] = Attende::ON_TIME;
         }
         else if ($fields['attend_time'] >= $keluar['end'] && $fields['attend_time']->toDateString() === $keluar['end']->toDateString()){
-            $fields['attende_type_id'] = self::KELUAR;
-            $fields['attende_status_id'] = self::LATE;
+            $fields['attende_type_id'] = Attende::KELUAR;
+            $fields['attende_status_id'] = Attende::LATE;
         }
         else{
-            $fields['attende_status_id'] = self::STATUS_NOT_VALID;
-            $fields['attende_type_id'] = self::TYPE_NOT_VALID;
+            $fields['attende_status_id'] = Attende::STATUS_NOT_VALID;
+            $fields['attende_type_id'] = Attende::TYPE_NOT_VALID;
             $errors = [
                 'message' => 'Tidak dapat absen dil uar waktu.'
             ];

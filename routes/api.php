@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AttendeController;
+use App\Http\Controllers\API\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,5 +39,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Route Attende Data
     Route::resource('attendes', AttendeController::class);
+    
+    // Route Permission Data
+    Route::resource('permissions', PermissionController::class);
 });
 

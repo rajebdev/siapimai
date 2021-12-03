@@ -53,12 +53,12 @@ class User extends Authenticatable
         return $this->belongsTo(Gender::class, 'gender_id', 'id');
     }
 
-    public function departemen()
+    public function department()
     {
         return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 
-    public function permission()
+    public function permissions()
     {
         return $this->hasMany(Permission::class, 'user_id', 'id');
     }

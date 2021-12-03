@@ -2,9 +2,17 @@
 
 > ### Laravel codebase containing real world examples (CRUD, auth, advanced patterns and more) that adheres to the [SIAPIMAI](https://github.com/https://github.com/rajebdev/siapimai) spec and API.
 
-This repo is functionality complete — PRs and issues welcome!
-
 ----------
+
+# To-Do List
+* [x] Membuat flow diagram / usecase diagram sederhana
+* [x] Membuat repo git baru dari project yang sudah anda kerjakan
+* [x] Absen masuk dan keluar menggunakan geo-tagging dari tempat tertentu
+* [ ] Laporan ditampilkan dalam bentuk dashboard grafik
+* [x] User leveling login and access with sanctum and custom middleware
+* [x] API Backend 90%
+* [ ] WEB Frontend 50%
+
 
 # Getting started
 

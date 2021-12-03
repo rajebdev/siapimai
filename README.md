@@ -11,7 +11,7 @@
 * [ ] Laporan ditampilkan dalam bentuk dashboard grafik
 * [x] User leveling login and access with sanctum and custom middleware
 * [x] API Backend 90%
-* [ ] WEB Frontend 50%
+* [ ] WEB Frontend 30%
 
 
 # Getting started

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WEB;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -15,8 +16,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $request->user();
-        return view('users.index', $users);
+        $user = Session::get('user');
+        if($user)
+        return view('user.index',['data'=>$user]);
+        else
+        return redirect('/login');
     }
 
     /**

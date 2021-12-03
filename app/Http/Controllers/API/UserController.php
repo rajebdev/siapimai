@@ -169,9 +169,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'department_id' => 'required',
             'gender_id' => 'required'
         ]);
+
+        $fields['department_id'] = 2;
 
         $user = User::create([
             'name' => $fields['name'],

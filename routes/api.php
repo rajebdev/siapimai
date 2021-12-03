@@ -25,7 +25,8 @@ use App\Http\Controllers\API\PermissionController;
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 
-// Protected routes
+
+// Protected routes with sanctum
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Route Users
@@ -34,20 +35,38 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route User Data
     Route::group(['prefix' => 'users'], function () {
         Route::get('/my', [UserController::class, 'my']);
+    });
+
+    // Route Attende Data
+    Route::group(['prefix' => 'attendes'], function () {
+        Route::get('/my', [AttendeController::class, 'my']);
+    });
+    
+    // Route Permission Data
+    Route::group(['prefix' => 'permissions'], function () {
+        Route::get('/my', [PermissionController::class, 'my']);
+    });
+
+});
+
+
+// Protected routes with sanctum and role
+Route::group(['middleware' => ['auth:sanctum', 'roleNotEmployee']], function () {
+    
+    // Route User Data
+    Route::group(['prefix' => 'users'], function () {
         Route::get('/all', [UserController::class, 'all']);
     });
     Route::resource('users', UserController::class);
 
     // Route Attende Data
     Route::group(['prefix' => 'attendes'], function () {
-        Route::get('/my', [AttendeController::class, 'my']);
         Route::get('/all', [AttendeController::class, 'all']);
     });
     Route::resource('attendes', AttendeController::class);
     
     // Route Permission Data
     Route::group(['prefix' => 'permissions'], function () {
-        Route::get('/my', [PermissionController::class, 'my']);
         Route::get('/all', [PermissionController::class, 'all']);
         Route::post('/approve/{permissions}',  [PermissionController::class, 'approve']);
     });

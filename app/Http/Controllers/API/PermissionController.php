@@ -52,19 +52,6 @@ class PermissionController extends Controller
      */
     public function all(Request $request)
     {
-        if (User::with('department')
-        ->find($request->user()->id)->department->slug === 'employee') {
-            return resp(
-                false,
-                'Pelanggaran',
-                [],
-                403,
-                0,
-                [
-                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
-                ]
-            );
-        }
         return resp(
             true,
             'Berhasil mengambil seluruh data izin.',
@@ -82,20 +69,6 @@ class PermissionController extends Controller
      */
     public function approve(Request $request, $id)
     {
-        if (User::with('department')
-        ->find($request->user()->id)->department->slug === 'employee') {
-            return resp(
-                false,
-                'Pelanggaran',
-                [],
-                403,
-                0,
-                [
-                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
-                ]
-            );
-        }
-
         $fields = $request->validate([
             'is_approved' => 'required',
         ]);

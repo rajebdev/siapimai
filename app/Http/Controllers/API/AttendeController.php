@@ -53,19 +53,6 @@ class AttendeController extends Controller
      */
     public function all(Request $request)
     {
-        if (User::with('department')
-        ->find($request->user()->id)->department->slug === 'employee') {
-            return resp(
-                false,
-                'Pelanggaran',
-                [],
-                403,
-                0,
-                [
-                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
-                ]
-            );
-        }
         return resp(
             true,
             'Berhasil mengambil seluruh data izin.',

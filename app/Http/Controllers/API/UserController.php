@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\RoleNotEmployee;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -49,19 +50,6 @@ class UserController extends Controller
      */
     public function all(Request $request)
     {
-        if (User::with('department')
-        ->find($request->user()->id)->department->slug === 'employee') {
-            return resp(
-                false,
-                'Pelanggaran',
-                [],
-                403,
-                0,
-                [
-                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
-                ]
-            );
-        }
         return resp(
             true,
             'Berhasil mengambil seluruh data user.',

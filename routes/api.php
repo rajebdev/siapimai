@@ -29,12 +29,13 @@ Route::post('/register', [UserController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Route Users
-    Route::get('/profile', function(Request $request) {
-        return auth()->user();
-    });
     Route::post('/logout', [UserController::class, 'logout']);
     
     // Route User Data
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/my', [UserController::class, 'my']);
+        Route::get('/all', [UserController::class, 'all']);
+    });
     Route::resource('users', UserController::class);
 
     // Route Attende Data

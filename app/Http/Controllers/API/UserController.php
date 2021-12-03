@@ -17,8 +17,54 @@ class UserController extends Controller
     public function index()
     {
         return resp(
+            false,
+            'Fungsi tidak ada.',
+            '',
+            404
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function my(Request $request)
+    {
+        $user = $request->user();
+        return resp(
             true,
-            'Berhasil mengambil seluruh data user',
+            'Berhasil mengambil data user.',
+            $user,
+            200
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function all(Request $request)
+    {
+        if (User::with('department')
+        ->find($request->user()->id)->department->slug === 'employee') {
+            return resp(
+                false,
+                'Pelanggaran',
+                [],
+                403,
+                0,
+                [
+                    'message' => 'Anda tidak memiliki izin untuk mengakses bagian ini!'
+                ]
+            );
+        }
+        return resp(
+            true,
+            'Berhasil mengambil seluruh data user.',
             User::all(),
             200
         );

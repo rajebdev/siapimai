@@ -1,67 +1,151 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# ![Laravel SIAPIMAI App]
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> ### Laravel codebase containing real world examples (CRUD, auth, advanced patterns and more) that adheres to the [SIAPIMAI](https://github.com/https://github.com/rajebdev/siapimai) spec and API.
 
-## About Laravel
+This repo is functionality complete — PRs and issues welcome!
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+----------
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Getting started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/8.x#installation-via-composer)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Alternative installation is possible without local dependencies relying on [Docker](#docker). 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Clone the repository
 
-## Laravel Sponsors
+    git clone git@github.com:rajebdev/siapimai.git
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Switch to the repo folder
 
-### Premium Partners
+    cd siapimai
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+Install all the dependencies using composer
 
-## Contributing
+    composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Copy the example env file and make the required configuration changes in the .env file
 
-## Code of Conduct
+    cp .env.example .env
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Generate a new application key
 
-## Security Vulnerabilities
+    php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Run the database migrations (**Set the database connection in .env before migrating**)
 
-## License
+    php artisan migrate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# siapimai
+Start the local development server
+
+    php artisan serve
+
+You can now access the server at http://localhost:8000
+
+**TL;DR command list**
+
+    git clone git@github.com:rajebdev/siapimai.git
+    cd siapimai
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    
+**Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
+
+    php artisan migrate
+    php artisan serve
+
+## Database seeding
+
+**Populate the database with seed data with relationships which includes users, articles, comments, tags, favorites and follows. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
+
+Run the database seeder and you're done
+
+    php artisan db:seed
+
+***Note*** : It's recommended to have a clean database before seeding. You can refresh your migrations at any point to clean the database by running the following command
+
+    php artisan migrate:refresh
+
+## API Specification
+
+This application adheres to the api specifications set by the [rajebdev](https://github.com/rajebdev). This helps mix and match any backend with any other frontend without conflicts.
+
+- POST  `/api/login` - for login to system
+- POST  `/api/register` - for register to system
+- POST  `/api/logout` - for logout from system
+- POST  `/api/users` - for store data user
+- GET   `/api/users/my` - for call user data only logged
+- GET   `/api/users/all` - for call all user data
+- GET   `/api/users/{user}` - for show data user
+- PUT   `/api/users/{user}` - for update data user
+- POST  `/api/attendes` - for store data attende
+- GET   `/api/attendes/my` - for call attende data only logged
+- GET   `/api/attendes/all` - for call all attende data
+- GET   `/api/attendes/{attende}` - for show data attende
+- PUT   `/api/attendes/{attende}` - for update data attende
+- POST  `/api/permissions` - for store data permission
+- GET   `/api/permissions/my` - for call permission data only logged
+- GET   `/api/permissions/all` - for call all permission data
+- GET   `/api/permissions/{permission}` - for show data permission
+- PUT   `/api/permissions/{permission}` - for update data permission
+- POST  `api/permissions/approve/{permissions}` - for approve permission request
+
+More information regarding the project can be found here https://github.com/rajebdev/siapimai
+
+----------
+
+# Code overview
+
+## Folders
+
+- `app` - Contains all the Eloquent models
+- `app/Http/Controllers/API` - Contains all the api controllers
+- `app/Http/Controllers/WEB` - Contains all the web controllers
+- `app/Models/` - Contains all the table models
+- `app/Http/Middleware` - Contains auth middleware
+- `config` - Contains all the application configuration files
+- `resources/view` - Contains all the view applicationfiles
+- `database/migrations` - Contains all the database migrations
+- `database/seeds` - Contains the database seeder
+- `routes/api.php` - Contains all the api routes defined in api.php file
+- `routes/web.php` - Contains all the web routes defined in web.php file
+- `public` - Contains all the web assets used
+
+## Environment variables
+
+- `.env` - Environment variables can be set in this file
+
+***Note*** : You can quickly set the database information and other variables in this file and have the application fully working.
+
+----------
+
+# Testing API
+
+Run the laravel development server
+
+    php artisan serve
+
+The api can now be accessed at
+
+    http://localhost:8000/api
+
+Request headers
+
+| **Required** 	| **Key**              	| **Value**            	|
+|----------	|------------------	|------------------	|
+| Yes      	| Content-Type     	| application/json 	|
+
+Refer the [api specification](#api-specification) for more info.
+
+----------
+
+# Cross-Origin Resource Sharing (CORS)
+ 
+This applications has CORS enabled by default on all API endpoints. The default configuration allows requests from `http://localhost:3000` and `http://localhost:4200` to help speed up your frontend testing. The CORS allowed origins can be changed by setting them in the config file. Please check the following sources to learn more about CORS.
+ 
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+- https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+- https://www.w3.org/TR/cors
